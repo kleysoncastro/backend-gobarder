@@ -19,4 +19,9 @@ appointimentsRoute.post('/', (request, response) => {
   return response.json(appointiment);
 });
 
+appointimentsRoute.get('/', (request, response) => {
+  const listAppointiment = appointimentsRepository.all();
+  return response.json(listAppointiment);
+});
+
 export default appointimentsRoute;

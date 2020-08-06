@@ -20,6 +20,13 @@ class AppointimentsRepository {
     );
     return findAppointiment || null;
   }
+
+  /**
+   * appointiments in array this.appointiments = [] list all
+   */
+  public all() {
+    return this.appointiments;
+  }
 }
 
 export default AppointimentsRepository;
