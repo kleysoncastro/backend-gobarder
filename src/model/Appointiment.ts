@@ -7,9 +7,9 @@ class Appointiment {
 
   date: Date;
 
-  constructor(provier: string, date: Date) {
+  constructor({ provider, date }: Omit<Appointiment, 'id'>) {
     this.id = uuid();
-    this.provider = provier;
+    this.provider = provider;
     this.date = date;
   }
 }

@@ -15,7 +15,10 @@ appointimentsRoute.post('/', (request, response) => {
   if (findAppointmentSomaDate)
     return response.status(400).json({ message: 'This date is not available' });
 
-  const appointiment = appointimentsRepository.create(provider, parseDate);
+  const appointiment = appointimentsRepository.create({
+    provider,
+    date: parseDate,
+  });
   return response.json(appointiment);
 });
 
