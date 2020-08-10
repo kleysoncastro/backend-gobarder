@@ -1,25 +1,31 @@
 import { Router } from 'express';
-import { startOfDay, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import AppointimentsRepository from '../repositories/AppointimentsRepository';
+import CreateAppointimentService from '../services/CreateAppointimentService';
 
 const appointimentsRoute = Router();
 
 const appointimentsRepository = new AppointimentsRepository();
 
 appointimentsRoute.post('/', (request, response) => {
-  const { provider, date } = request.body;
-  const parseDate = startOfDay(parseISO(date));
+  try {
+    const { provider, date } = request.body;
 
-  const findAppointmentSomaDate = appointimentsRepository.findByDate(parseDate);
+    const parseDate = parseISO(date);
 
-  if (findAppointmentSomaDate)
-    return response.status(400).json({ message: 'This date is not available' });
+    const createAppointiment = new CreateAppointimentService(
+      appointimentsRepository,
+    );
 
-  const appointiment = appointimentsRepository.create({
-    provider,
-    date: parseDate,
-  });
-  return response.json(appointiment);
+    const appointiment = createAppointiment.execute({
+      provider,
+      date: parseDate,
+    });
+
+    return response.json(appointiment);
+  } catch (err) {
+    response.status(400).json({ error: err.message });
+  }
 });
 
 appointimentsRoute.get('/', (request, response) => {
