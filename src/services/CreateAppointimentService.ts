@@ -14,7 +14,7 @@ class CreateAppointimentService {
   public async execute({ provider, date }: Request): Promise<Appointiment> {
     const appointimentDate = startOfDay(date);
 
-    const findAppointmentSomaDate = this.appointimentsRepository.findByDate(
+    const findAppointmentSomaDate = await this.appointimentsRepository.findByDate(
       appointimentDate,
     );
 

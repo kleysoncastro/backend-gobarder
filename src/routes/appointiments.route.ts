@@ -1,23 +1,20 @@
 import { Router } from 'express';
 import { parseISO } from 'date-fns';
+import { getCustomRepository } from 'typeorm';
 import AppointimentsRepository from '../repositories/AppointimentsRepository';
 import CreateAppointimentService from '../services/CreateAppointimentService';
 
 const appointimentsRoute = Router();
 
-const appointimentsRepository = new AppointimentsRepository();
-
-appointimentsRoute.post('/', (request, response) => {
+appointimentsRoute.post('/', async (request, response) => {
   try {
     const { provider, date } = request.body;
 
     const parseDate = parseISO(date);
 
-    const createAppointiment = new CreateAppointimentService(
-      appointimentsRepository,
-    );
+    const createAppointiment = new CreateAppointimentService();
 
-    const appointiment = createAppointiment.execute({
+    const appointiment = await createAppointiment.execute({
       provider,
       date: parseDate,
     });
@@ -28,8 +25,9 @@ appointimentsRoute.post('/', (request, response) => {
   }
 });
 
-appointimentsRoute.get('/', (request, response) => {
-  const listAppointiment = appointimentsRepository.all();
+appointimentsRoute.get('/', async (request, response) => {
+  const appointimentsRepository = getCustomRepository(AppointimentsRepository);
+  const listAppointiment = await appointimentsRepository.find();
   return response.json(listAppointiment);
 });
 
