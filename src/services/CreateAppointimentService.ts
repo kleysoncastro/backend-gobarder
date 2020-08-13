@@ -1,4 +1,5 @@
 import { startOfDay } from 'date-fns';
+import { getCustomRepository } from 'typeorm';
 import Appointiment from '../model/Appointiment';
 import AppointimentsRepository from '../repositories/AppointimentsRepository';
 
@@ -8,13 +9,9 @@ interface Request {
 }
 
 class CreateAppointimentService {
-  private appointimentsRepository: AppointimentsRepository;
+  appointimentsRepository = getCustomRepository(AppointimentsRepository);
 
-  constructor(appointimentsRepository: AppointimentsRepository) {
-    this.appointimentsRepository = appointimentsRepository;
-  }
-
-  public execute({ provider, date }: Request): Appointiment {
+  public async execute({ provider, date }: Request): Promise<Appointiment> {
     const appointimentDate = startOfDay(date);
 
     const findAppointmentSomaDate = this.appointimentsRepository.findByDate(
@@ -27,6 +24,8 @@ class CreateAppointimentService {
       provider,
       date: appointimentDate,
     });
+
+    await this.appointimentsRepository.save(appointiment);
     return appointiment;
   }
 }
