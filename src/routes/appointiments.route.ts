@@ -8,14 +8,14 @@ const appointimentsRoute = Router();
 
 appointimentsRoute.post('/', async (request, response) => {
   try {
-    const { provider, date } = request.body;
+    const { provider_id, date } = request.body;
 
     const parseDate = parseISO(date);
 
     const createAppointiment = new CreateAppointimentService();
 
     const appointiment = await createAppointiment.execute({
-      provider,
+      provider_id,
       date: parseDate,
     });
 

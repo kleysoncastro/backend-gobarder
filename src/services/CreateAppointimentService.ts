@@ -4,14 +4,14 @@ import Appointiment from '../model/Appointiment';
 import AppointimentsRepository from '../repositories/AppointimentsRepository';
 
 interface Request {
-  provider: string;
+  provider_id: string;
   date: Date;
 }
 
 class CreateAppointimentService {
   appointimentsRepository = getCustomRepository(AppointimentsRepository);
 
-  public async execute({ provider, date }: Request): Promise<Appointiment> {
+  public async execute({ provider_id, date }: Request): Promise<Appointiment> {
     const appointimentDate = startOfDay(date);
 
     const findAppointmentSomaDate = await this.appointimentsRepository.findByDate(
@@ -21,7 +21,7 @@ class CreateAppointimentService {
     if (findAppointmentSomaDate) throw Error('This date is not available');
 
     const appointiment = this.appointimentsRepository.create({
-      provider,
+      provider_id,
       date: appointimentDate,
     });
 
