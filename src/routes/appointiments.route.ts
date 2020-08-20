@@ -3,8 +3,10 @@ import { parseISO } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 import AppointimentsRepository from '../repositories/AppointimentsRepository';
 import CreateAppointimentService from '../services/CreateAppointimentService';
+import ensureAthenticate from '../middlewares/ensureAuthenticate';
 
 const appointimentsRoute = Router();
+appointimentsRoute.use(ensureAthenticate);
 
 appointimentsRoute.post('/', async (request, response) => {
   try {
