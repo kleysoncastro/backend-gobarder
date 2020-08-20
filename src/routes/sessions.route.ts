@@ -9,9 +9,12 @@ sessionRoute.post('/', async (request, response) => {
 
     const { email, password } = request.body;
 
-    const user = await authenticateSession.execute({ email, password });
-    delete user.user.password;
-    return response.json(user);
+    const { user, token } = await authenticateSession.execute({
+      email,
+      password,
+    });
+    delete user.password;
+    return response.json({ user, token });
   } catch (err) {
     response.status(400).json({ error: err.message });
   }
