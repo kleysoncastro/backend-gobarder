@@ -3,6 +3,8 @@ import { getCustomRepository } from 'typeorm';
 import Appointiment from '../model/Appointiment';
 import AppointimentsRepository from '../repositories/AppointimentsRepository';
 
+import AppError from '../errors/AppError';
+
 interface Request {
   provider_id: string;
   date: Date;
@@ -18,7 +20,8 @@ class CreateAppointimentService {
       appointimentDate,
     );
 
-    if (findAppointmentSomaDate) throw Error('This date is not available');
+    if (findAppointmentSomaDate)
+      throw new AppError('This date is not available');
 
     const appointiment = this.appointimentsRepository.create({
       provider_id,
