@@ -20,16 +20,13 @@ export default function ensureAthenticate(
   if (!authHeader) throw new AppError('JWT token is missing', 401);
 
   const [, token] = authHeader.split(' ');
-  try {
-    const decoded = verify(token, authConfig.jwt.secret);
-    const { sub } = decoded as TokenPayload;
 
-    request.user = {
-      id: sub,
-    };
+  const decoded = verify(token, authConfig.jwt.secret);
+  const { sub } = decoded as TokenPayload;
 
-    return next();
-  } catch {
-    throw new AppError('Token invalid', 401);
-  }
+  request.user = {
+    id: sub,
+  };
+
+  return next();
 }
